@@ -8,6 +8,14 @@ Matrix::Matrix(int nrows, int ncols){
 	this->data.assign(nrows, std::vector<double>(ncols, 0.0));
 }
 
+void Matrix::set(const int row, const int col, const double val){
+	data[row][col] = val;
+}
+
+double Matrix::get(const int row, const int col){
+	return data[row][col];
+}
+
 void Matrix::print(){
 	for(int i = 0; i < nrows; i++){
 		for(int j = 0; j < ncols; j++){
