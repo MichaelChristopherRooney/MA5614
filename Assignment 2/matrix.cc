@@ -16,6 +16,14 @@ double Matrix::get(const int row, const int col){
 	return data[row][col];
 }
 
+std::vector<double>& Matrix::operator[](const int row){
+	return data[row];
+}
+
+double& Matrix::operator()(const int row, const int col){
+	return data[row][col];
+}
+
 void Matrix::print(){
 	for(int i = 0; i < nrows; i++){
 		for(int j = 0; j < ncols; j++){
