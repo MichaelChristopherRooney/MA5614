@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 
 #include "matrix.h"
@@ -20,11 +21,15 @@ std::vector<double>& Matrix::operator[](const int row){
 	return data[row];
 }
 
-std::vector<double> Matrix::operator[](const int row) const{
+const std::vector<double> Matrix::operator[](const int row) const{
 	return data[row];
 }
 
 double& Matrix::operator()(const int row, const int col){
+	return data[row][col];
+}
+
+double Matrix::operator()(const int row, const int col) const{
 	return data[row][col];
 }
 
@@ -35,10 +40,9 @@ Matrix& Matrix::operator=(const Matrix& m){
 	return *this;
 }
 
-Matrix Matrix::operator+(const Matrix& other){
-	if(this->nrows != other.nrows || this->ncols != other.ncols){
-		// TODO: some kind of error here
-	}
+Matrix Matrix::operator+(const Matrix& other) const{
+	assert(this->nrows == other.nrows);
+	assert(this->ncols == other.ncols);
 	Matrix n(this->nrows, this->ncols);
 	for(int i = 0; i < this->nrows; i++){
 		for(int j = 0; j < this->ncols; j++){
@@ -49,9 +53,8 @@ Matrix Matrix::operator+(const Matrix& other){
 }
 
 void Matrix::operator+=(const Matrix& other){
-	if(this->nrows != other.nrows || this->ncols != other.ncols){
-		// TODO: some kind of error here
-	}
+	assert(this->nrows == other.nrows);
+	assert(this->ncols == other.ncols);
 	for(int i = 0; i < this->nrows; i++){
 		for(int j = 0; j < this->ncols; j++){
 			this->data[i][j] = this->data[i][j] + other[i][j];
@@ -59,10 +62,9 @@ void Matrix::operator+=(const Matrix& other){
 	}
 }
 
-Matrix Matrix::operator-(const Matrix& other){
-	if(this->nrows != other.nrows || this->ncols != other.ncols){
-		// TODO: some kind of error here
-	}
+Matrix Matrix::operator-(const Matrix& other) const{
+	assert(this->nrows == other.nrows);
+	assert(this->ncols == other.ncols);
 	Matrix n(this->nrows, this->ncols);
 	for(int i = 0; i < this->nrows; i++){
 		for(int j = 0; j < this->ncols; j++){
@@ -73,9 +75,8 @@ Matrix Matrix::operator-(const Matrix& other){
 }
 
 void Matrix::operator-=(const Matrix& other){
-	if(this->nrows != other.nrows || this->ncols != other.ncols){
-		// TODO: some kind of error here
-	}
+	assert(this->nrows == other.nrows);
+	assert(this->ncols == other.ncols);
 	for(int i = 0; i < this->nrows; i++){
 		for(int j = 0; j < this->ncols; j++){
 			this->data[i][j] = this->data[i][j] - other[i][j];
@@ -83,10 +84,8 @@ void Matrix::operator-=(const Matrix& other){
 	}
 }
 
-Matrix Matrix::operator*(const Matrix& other){
-	if(this->ncols != other.nrows){
-		// TODO: some kind of error here
-	}
+Matrix Matrix::operator*(const Matrix& other) const{
+	assert(this->ncols == other.nrows);
 	Matrix n(this->nrows, other.ncols);
 	for(int i = 0; i < this->nrows; i++){
 		for(int j = 0; j < other.ncols; j++){
@@ -101,9 +100,7 @@ Matrix Matrix::operator*(const Matrix& other){
 }
 
 void Matrix::operator*=(const Matrix& other){
-	if(this->ncols != other.nrows){
-		// TODO: some kind of error here
-	}
+	assert(this->ncols == other.nrows);
 	for(int i = 0; i < this->nrows; i++){
 		for(int j = 0; j < other.ncols; j++){
 			double sum = 0.0;
@@ -115,7 +112,7 @@ void Matrix::operator*=(const Matrix& other){
 	}
 }
 
-bool Matrix::operator==(const Matrix &other){
+bool Matrix::operator==(const Matrix &other) const{
 	if(this->nrows != other.nrows || this->ncols != other.ncols){
 		return false;
 	}
@@ -129,7 +126,7 @@ bool Matrix::operator==(const Matrix &other){
 	return true;
 }
 
-bool Matrix::operator!=(const Matrix &other){
+bool Matrix::operator!=(const Matrix &other) const{
 	if(this->nrows != other.nrows || this->ncols != other.ncols){
 		return true;
 	}
@@ -153,7 +150,7 @@ std::ostream& operator<<(std::ostream& os, Matrix m){
 	return os;
 }
 
-void Matrix::print(){
+void Matrix::print() const{
 	for(int i = 0; i < nrows; i++){
 		for(int j = 0; j < ncols; j++){
 			std::cout << data[i][j] << ", ";
@@ -162,11 +159,11 @@ void Matrix::print(){
 	}
 }
 
-int Matrix::get_nrows(){
+int Matrix::get_nrows() const{
 	return this->nrows;
 }
 
-int Matrix::get_ncols(){
+int Matrix::get_ncols() const{
 	return this->ncols;
 }
 
