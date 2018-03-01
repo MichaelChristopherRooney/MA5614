@@ -20,6 +20,10 @@ std::vector<double>& Matrix::operator[](const int row){
 	return data[row];
 }
 
+std::vector<double> Matrix::operator[](const int row) const{
+	return data[row];
+}
+
 double& Matrix::operator()(const int row, const int col){
 	return data[row][col];
 }
@@ -38,7 +42,7 @@ Matrix Matrix::operator+(const Matrix& other){
 	Matrix n(this->nrows, this->ncols);
 	for(int i = 0; i < this->nrows; i++){
 		for(int j = 0; j < this->ncols; j++){
-			n[i][j] = this->data[i][j] + other.get(i, j);
+			n[i][j] = this->data[i][j] + other[i][j];
 		}
 	}
 	return n;
@@ -50,7 +54,7 @@ void Matrix::operator+=(const Matrix& other){
 	}
 	for(int i = 0; i < this->nrows; i++){
 		for(int j = 0; j < this->ncols; j++){
-			this->data[i][j] = this->data[i][j] + other.get(i, j);
+			this->data[i][j] = this->data[i][j] + other[i][j];
 		}
 	}
 }
@@ -62,7 +66,7 @@ Matrix Matrix::operator-(const Matrix& other){
 	Matrix n(this->nrows, this->ncols);
 	for(int i = 0; i < this->nrows; i++){
 		for(int j = 0; j < this->ncols; j++){
-			n[i][j] = this->data[i][j] - other.get(i, j);
+			n[i][j] = this->data[i][j] - other[i][j];
 		}
 	}
 	return n;
@@ -74,7 +78,7 @@ void Matrix::operator-=(const Matrix& other){
 	}
 	for(int i = 0; i < this->nrows; i++){
 		for(int j = 0; j < this->ncols; j++){
-			this->data[i][j] = this->data[i][j] - other.get(i, j);
+			this->data[i][j] = this->data[i][j] - other[i][j];
 		}
 	}
 }
@@ -88,7 +92,7 @@ Matrix Matrix::operator*(const Matrix& other){
 		for(int j = 0; j < other.ncols; j++){
 			double sum = 0.0;
 			for(int k = 0; k < this->ncols; k++){
-				sum += this->data[i][k] * other.get(k, j);
+				sum += this->data[i][k] * other[k][j];
 			}
 			n[i][j] = sum;
 		}
@@ -104,7 +108,7 @@ void Matrix::operator*=(const Matrix& other){
 		for(int j = 0; j < other.ncols; j++){
 			double sum = 0.0;
 			for(int k = 0; k < this->ncols; k++){
-				sum += this->data[i][k] * other.get(k, j);
+				sum += this->data[i][k] * other[k][j];
 			}
 			this->data[i][j] = sum;
 		}
@@ -117,7 +121,7 @@ bool Matrix::operator==(const Matrix &other){
 	}
 	for(int i = 0; i < this->nrows; i++){
 		for(int j = 0; j < this->ncols; j++){
-			if(this->data[i][j] != other.get(i, j)){
+			if(this->data[i][j] != other[i][j]){
 				return false;
 			}
 		}
@@ -131,7 +135,7 @@ bool Matrix::operator!=(const Matrix &other){
 	}
 	for(int i = 0; i < this->nrows; i++){
 		for(int j = 0; j < this->ncols; j++){
-			if(this->data[i][j] != other.get(i, j)){
+			if(this->data[i][j] != other[i][j]){
 				return true;
 			}
 		}

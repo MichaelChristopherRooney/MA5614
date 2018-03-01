@@ -10,6 +10,7 @@ public:
 	double get(const int row, const int col) const;
 	void print();
 	std::vector<double>& operator[](const int row);
+	std::vector<double> operator[](const int row) const;
 	Matrix& operator=(const Matrix& m);
 	Matrix operator+(const Matrix& other);
 	void operator+=(const Matrix& other);	
