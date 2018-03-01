@@ -55,6 +55,30 @@ void Matrix::operator+=(const Matrix& other){
 	}
 }
 
+Matrix Matrix::operator-(const Matrix& other){
+	if(this->nrows != other.nrows || this->ncols != other.ncols){
+		// TODO: some kind of error here
+	}
+	Matrix n(this->nrows, this->ncols);
+	for(int i = 0; i < this->nrows; i++){
+		for(int j = 0; j < this->ncols; j++){
+			n[i][j] = this->data[i][j] - other.get(i, j);
+		}
+	}
+	return n;
+}
+
+void Matrix::operator-=(const Matrix& other){
+	if(this->nrows != other.nrows || this->ncols != other.ncols){
+		// TODO: some kind of error here
+	}
+	for(int i = 0; i < this->nrows; i++){
+		for(int j = 0; j < this->ncols; j++){
+			this->data[i][j] = this->data[i][j] - other.get(i, j);
+		}
+	}
+}
+
 Matrix Matrix::operator*(const Matrix& other){
 	if(this->ncols != other.nrows){
 		// TODO: some kind of error here
@@ -85,6 +109,44 @@ void Matrix::operator*=(const Matrix& other){
 			this->data[i][j] = sum;
 		}
 	}
+}
+
+bool Matrix::operator==(const Matrix &other){
+	if(this->nrows != other.nrows || this->ncols != other.ncols){
+		return false;
+	}
+	for(int i = 0; i < this->nrows; i++){
+		for(int j = 0; j < this->ncols; j++){
+			if(this->data[i][j] != other.get(i, j)){
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+bool Matrix::operator!=(const Matrix &other){
+	if(this->nrows != other.nrows || this->ncols != other.ncols){
+		return true;
+	}
+	for(int i = 0; i < this->nrows; i++){
+		for(int j = 0; j < this->ncols; j++){
+			if(this->data[i][j] != other.get(i, j)){
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+std::ostream& operator<<(std::ostream& os, Matrix m){
+	for(int i = 0; i < m.nrows; i++){
+		for(int j = 0; j < m.ncols; j++){
+			os << m.data[i][j] << ", ";
+		}
+		os << std::endl;
+	}
+	return os;
 }
 
 void Matrix::print(){

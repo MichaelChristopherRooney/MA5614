@@ -65,6 +65,29 @@ void test_addition(){
 	}
 }
 
+void test_subtraction(){
+	const double VALUE_1 = 2.0;
+	const double VALUE_2 = 3.0;
+	// First test m3 = m2 - m1
+	Matrix m1 (2, 3);
+	m1.set(1, 1, VALUE_1);
+	Matrix m2 (2, 3);
+	m2.set(1, 1, VALUE_2);
+	Matrix m3 = m2 - m1;
+	if(m3.get(1, 1) == VALUE_2 - VALUE_1){
+		std::cout << "SUCCESS: - overload worked correctly\n";
+	} else {
+		std::cout << "ERROR: - overload did not work correctly\n";
+	}
+	// Now test m2 -= m1
+	m2 -= m1;
+	if(m2.get(1, 1) == VALUE_2 - VALUE_1){
+		std::cout << "SUCCESS: -= overload worked correctly\n";
+	} else {
+		std::cout << "ERROR: -= overload did not work correctly\n";
+	}
+}
+
 void test_multiplication(){
 	const double VALUE = 2.0;
 	// First do m3 = m2 * m1
@@ -87,23 +110,55 @@ void test_multiplication(){
 	}
 }
 
+void test_equality(){
+	// First they should be equal
+	Matrix m1(1, 2);
+	Matrix m2(1, 2);
+	if(m1 == m2){
+		std::cout << "SUCCESS: == overload worked correctly\n";
+	} else {
+		std::cout << "ERROR: == overload did not work correctly\n";
+	}
+	// Now test to check they are not equal
+	m2[0][0] = 3.0;
+	if(m1 != m2){
+		std::cout << "SUCCESS: != overload worked correctly\n";
+	} else {
+		std::cout << "ERROR: != overload did not work correctly\n";
+	}
+}
+
 void test_transpose(){
 	const double VALUE = 2.0;
 	Matrix m1(2, 3);
 	m1[1][2] = VALUE;
 	Matrix m2 = transpose(m1);
 	if(m2[2][1] == VALUE){
-		std::cout << "SUCCESS: transpose function worked correctly\n";
+		std::cout << "SUCCESS: transpose() worked correctly\n";
 	} else {
-		std::cout << "ERROR: transpose function did not work correctly\n";
+		std::cout << "ERROR: transpose() did not work correctly\n";
 	}
+}
+
+void test_printing(){
+	Matrix m(2, 2);
+	m[0][0] = 1.0;
+	m[0][1] = 2.0;
+	m[1][0] = 3.0;
+	m[1][1] = 4.0;
+	std::cout << "Printing with << overload:\n" << m;
+	std::cout << "Printing with print() member function:\n";
+	m.print();
 }
 
 int main(void){
 	test_accessors_and_mutators();
 	test_assignment();
 	test_addition();
+	test_subtraction();
 	test_multiplication();
+	test_equality();
 	test_transpose();
+	test_printing();
 	return 0;
 }

@@ -1,4 +1,5 @@
 #include <vector>
+#include <iostream>
 
 // TODO: destructor
 
@@ -12,11 +13,16 @@ public:
 	Matrix& operator=(const Matrix& m);
 	Matrix operator+(const Matrix& other);
 	void operator+=(const Matrix& other);	
+	Matrix operator-(const Matrix& other);
+	void operator-=(const Matrix& other);	
 	Matrix operator*(const Matrix& other);
 	void operator*=(const Matrix& other);
 	double& operator()(const int row, const int col);
+	bool operator==(const Matrix &other);
+	bool operator!=(const Matrix &other);
 	int get_nrows();
 	int get_ncols();
+	friend std::ostream& operator<<(std::ostream& os, Matrix m);
 private:
 	int nrows;
 	int ncols;
@@ -25,5 +31,5 @@ private:
 	//~Matrix(); // disable default destructor
 };
 
-// Not a member function, declare outside class
+// Non-member functions, declare outside class
 Matrix transpose(Matrix m);
