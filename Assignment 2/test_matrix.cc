@@ -10,29 +10,100 @@ void test_accessors_and_mutators(){
 	// First use set() and get()
 	m.set(1, 1, SET_VALUE_ONE);
 	if(m.get(1, 1) == SET_VALUE_ONE){
-		std::cout << "SUCCESS: Element at [1, 1] set and retrieved correctly using set() and get()\n";
+		std::cout << "SUCCESS: set() and get() worked correctly\n";
 	} else { 
-		std::cout << "ERROR: Element at [1, 1] NOT set and retrieved correctly using set() and get()\n";
+		std::cout << "ERROR: set() and get() did not work correctly\n";
 	}
 	// Now use [] 
 	m[1][1] = SET_VALUE_TWO;
 	if(m[1][1] == SET_VALUE_TWO){
-		std::cout << "SUCCESS: Element at [1, 1] set and retrieved correctly using []\n";
+		std::cout << "SUCCESS: [] overload worked correctly\n";
 	} else { 
-		std::cout << "ERROR: Element at [1, 1] NOT set and retrieved correctly using []\n";
+		std::cout << "ERROR: [] overload did not work correctly\n";
 		return;
 	}
 	// Now use ()
 	m(1, 1) = SET_VALUE_THREE;
 	if(m(1, 1) == SET_VALUE_THREE){
-		std::cout << "SUCCESS: Element at [1, 1] set and retrieved correctly using ()\n";
+		std::cout << "SUCCESS: () overload worked correctly\n";
 	} else { 
-		std::cout << "ERROR: Element at [1, 1] NOT set and retrieved correctly using ()\n";
+		std::cout << "ERROR: () did not work correctly\n";
 		return;
+	}
+}
+
+void test_assignment(){
+	const double VALUE = 2.0;
+	Matrix m1 (2, 3);
+	m1.set(1, 1, VALUE);
+	Matrix m2 = m1;
+	if(m1.get(1, 1) == m2.get(1, 1)){
+		std::cout << "SUCCESS: = overload worked correctly\n";
+	} else {
+		std::cout << "ERROR: = overload did not work correctly\n";
+	}
+}
+
+void test_addition(){
+	const double VALUE = 2.0;
+	// First test m3 = m2 + m1
+	Matrix m1 (2, 3);
+	m1.set(1, 1, VALUE);
+	Matrix m2 = m1;
+	Matrix m3 = m2 + m1;
+	if(m3.get(1, 1) == VALUE * 2){
+		std::cout << "SUCCESS: + overload worked correctly\n";
+	} else {
+		std::cout << "ERROR: + overload did not work correctly\n";
+	}
+	// Now test m2 += m1
+	m2 += m1;
+	if(m2.get(1, 1) == VALUE * 2){
+		std::cout << "SUCCESS: += overload worked correctly\n";
+	} else {
+		std::cout << "ERROR: += overload did not work correctly\n";
+	}
+}
+
+void test_multiplication(){
+	const double VALUE = 2.0;
+	// First do m3 = m2 * m1
+	Matrix m1(1, 2);
+	m1[0][0] = VALUE;
+	Matrix m2(2, 1);
+	m2[0][0] = VALUE;
+	Matrix m3 = m2 * m1;
+	if(m3[0][0] == VALUE * 2){
+		std::cout << "SUCCESS: * overload worked correctly\n";
+	} else {
+		std::cout << "ERROR: * overload did not work correctly\n";
+	}
+	// Now do m2 *= m1
+	m2 *= m1;
+	if(m2[0][0] == VALUE * 2){
+		std::cout << "SUCCESS: *= overload worked correctly\n";
+	} else {
+		std::cout << "ERROR: *= overload did not work correctly\n";
+	}
+}
+
+void test_transpose(){
+	const double VALUE = 2.0;
+	Matrix m1(2, 3);
+	m1[1][2] = VALUE;
+	Matrix m2 = transpose(m1);
+	if(m2[2][1] == VALUE){
+		std::cout << "SUCCESS: transpose function worked correctly\n";
+	} else {
+		std::cout << "ERROR: transpose function did not work correctly\n";
 	}
 }
 
 int main(void){
 	test_accessors_and_mutators();
+	test_assignment();
+	test_addition();
+	test_multiplication();
+	test_transpose();
 	return 0;
 }

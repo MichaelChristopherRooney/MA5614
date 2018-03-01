@@ -12,7 +12,7 @@ void Matrix::set(const int row, const int col, const double val){
 	data[row][col] = val;
 }
 
-double Matrix::get(const int row, const int col){
+double Matrix::get(const int row, const int col) const{
 	return data[row][col];
 }
 
@@ -24,6 +24,69 @@ double& Matrix::operator()(const int row, const int col){
 	return data[row][col];
 }
 
+Matrix& Matrix::operator=(const Matrix& m){
+	this->nrows = m.nrows;
+	this->ncols = m.ncols;
+	this->data = m.data;
+	return *this;
+}
+
+Matrix Matrix::operator+(const Matrix& other){
+	if(this->nrows != other.nrows || this->ncols != other.ncols){
+		// TODO: some kind of error here
+	}
+	Matrix n(this->nrows, this->ncols);
+	for(int i = 0; i < this->nrows; i++){
+		for(int j = 0; j < this->ncols; j++){
+			n[i][j] = this->data[i][j] + other.get(i, j);
+		}
+	}
+	return n;
+}
+
+void Matrix::operator+=(const Matrix& other){
+	if(this->nrows != other.nrows || this->ncols != other.ncols){
+		// TODO: some kind of error here
+	}
+	for(int i = 0; i < this->nrows; i++){
+		for(int j = 0; j < this->ncols; j++){
+			this->data[i][j] = this->data[i][j] + other.get(i, j);
+		}
+	}
+}
+
+Matrix Matrix::operator*(const Matrix& other){
+	if(this->ncols != other.nrows){
+		// TODO: some kind of error here
+	}
+	Matrix n(this->nrows, other.ncols);
+	for(int i = 0; i < this->nrows; i++){
+		for(int j = 0; j < other.ncols; j++){
+			double sum = 0.0;
+			for(int k = 0; k < this->ncols; k++){
+				sum += this->data[i][k] * other.get(k, j);
+			}
+			n[i][j] = sum;
+		}
+	}
+	return n;
+}
+
+void Matrix::operator*=(const Matrix& other){
+	if(this->ncols != other.nrows){
+		// TODO: some kind of error here
+	}
+	for(int i = 0; i < this->nrows; i++){
+		for(int j = 0; j < other.ncols; j++){
+			double sum = 0.0;
+			for(int k = 0; k < this->ncols; k++){
+				sum += this->data[i][k] * other.get(k, j);
+			}
+			this->data[i][j] = sum;
+		}
+	}
+}
+
 void Matrix::print(){
 	for(int i = 0; i < nrows; i++){
 		for(int j = 0; j < ncols; j++){
@@ -33,3 +96,20 @@ void Matrix::print(){
 	}
 }
 
+int Matrix::get_nrows(){
+	return this->nrows;
+}
+
+int Matrix::get_ncols(){
+	return this->ncols;
+}
+
+Matrix transpose(Matrix m){
+	Matrix n(m.get_ncols(), m.get_nrows());
+	for(int i = 0; i < m.get_nrows(); i++){
+		for(int j = 0; j < m.get_ncols(); j++){
+			n[j][i] = m[i][j];
+		}
+	}
+	return n;
+}
