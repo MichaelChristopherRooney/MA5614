@@ -1,7 +1,10 @@
 #include <vector>
 #include <iostream>
 
-// TODO: destructor
+// README
+// Default constructor is disabled as we need to know nrows and ncols at creation time.
+// Default destructor is used as there is no need to deallocate any memory.
+// Vectors are used to store the matrix elements, and these will deallocate themselves.
 
 class Matrix {
 public:
@@ -30,7 +33,6 @@ private:
 	int ncols;
 	std::vector<std::vector<double> > data;
 	Matrix(); // disable default constructor
-	//~Matrix(); // disable default destructor
 };
 
 // Non-member functions, declare outside class

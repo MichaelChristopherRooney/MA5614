@@ -129,11 +129,15 @@ void test_equality(){
 }
 
 void test_transpose(){
-	const double VALUE = 2.0;
 	Matrix m1(2, 3);
-	m1[1][2] = VALUE;
+	m1[0][0] = 0.0;
+	m1[0][1] = 1.0;
+	m1[0][2] = 2.0;
+	m1[1][0] = 3.0;
+	m1[1][1] = 4.0;
+	m1[1][2] = 5.0;
 	Matrix m2 = transpose(m1);
-	if(m2[2][1] == VALUE){
+	if(m2[0][0] == 0.0 && m2[2][1] == 5.0 && m2[1][0] == 1.0){
 		std::cout << "SUCCESS: transpose() worked correctly\n";
 	} else {
 		std::cout << "ERROR: transpose() did not work correctly\n";
