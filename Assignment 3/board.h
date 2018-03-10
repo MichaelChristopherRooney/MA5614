@@ -25,5 +25,7 @@ private:
 	Colour grid[NROWS][NCOLS];
 	int num_col_entries[NCOLS];
 	void clear_old_printed_board() const;
-	Colour check_win_at_pos(const int row, const int col) const;
+	Colour check_horizontal_win() const;
+	Colour check_vertical_win() const;
+	Colour check_diagonal_win() const;
 };

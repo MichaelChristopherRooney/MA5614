@@ -25,9 +25,6 @@ int main(void){
 			} else {
 				std::cout << "Red won!\n";
 			}
-			std::cout << "Press enter to exit...\n";
-			char c;
-			std::cin >> c;
 			return 0;
 		}
 		if(player == YELLOW){

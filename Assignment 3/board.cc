@@ -44,52 +44,69 @@ void Board::clear_old_printed_board() const{
 	printf("\033[2J\033[1;1H");
 }
 
-Colour Board::check_win_at_pos(const int row, const int col) const {
-	//std::cout << "Checking row=" << row << ", col=" << col << "\n";
-	Colour c = grid[row][col];
-	bool win = false;
-	// Check horizontal
-	if(col >= 3){
-		win = true;
-		for(int i = col - 3; i <= col; i++){
-			if(grid[row][i] != c){
-				//std::cout << "Match failed at row " << row << " col " << i << "\n";
-				win = false;
-				break;
+// Note only need to check up to NCOLS - 3
+Colour Board::check_horizontal_win() const {
+	for(int i = 0; i < NROWS; i++){
+		for(int j = 0; j < NCOLS - 3; j++){
+			Colour c = grid[i][j];
+			if(c == NONE){
+				continue;
+			}
+			bool win = true;
+			for(int n = 1; n < 4; n++){ // note n starts at 1
+				if(grid[i][j + n] != c){
+					win = false;
+					break;
+				}
+			}
+			if(win){
+				return c;
 			}
 		}
-		if(win){
-			return c;
-		}
 	}
-	// Check vertical
-	if(row >= 3){ // TODO: check this
-		win = true;
-		for(int i = row - 3; i <= row; i++){
-			if(grid[i][col] != c){
-				//std::cout << "Match failed at row " << i << " col " << col << "\n";
-				win = false;
-				break;
+	return NONE;
+}
+
+// Note only need to check up to NROWS - 3
+Colour Board::check_vertical_win() const {
+	for(int j = 0; j < NCOLS; j++){
+		for(int i = 0; i < NROWS - 3; i++){
+			Colour c = grid[i][j];
+			if(c == NONE){
+				continue;
+			}
+			bool win = true;
+			for(int n = 1; n < 4; n++){ // note n starts at 1
+				if(grid[i + n][j] != c){
+					win = false;
+					break;
+				}
+			}
+			if(win){
+				return c;
 			}
 		}
-		if(win){
-			return c;
-		}
 	}
-	// TODO: diagonal
+	return NONE;
+}
+
+Colour Board::check_diagonal_win() const {
+	// TODO
 	return NONE;
 }
 
 Colour Board::check_win() const {
-	for(int row = 0; row < NROWS; row++){
-		for(int col = 0; col < NCOLS; col++){
-			if(grid[row][col] != NONE){
-				Colour c = check_win_at_pos(row, col);
-				if(c != NONE){
-					return c;
-				}
-			}		
-		}
+	Colour c = check_horizontal_win();
+	if(c != NONE){
+		return c;
+	}
+	c = check_vertical_win();
+	if(c != NONE){
+		return c;
+	}
+	c = check_diagonal_win();
+	if(c != NONE){
+		return c;
 	}
 	return NONE;
 }
