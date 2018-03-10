@@ -26,12 +26,11 @@ Colour Board::get_colour_at_pos(const int x, const int y) const {
 // For each column we track how many tokens are in it already.
 // We this to find the highest free index, which we take as the "bottom".
 Move_result Board::insert_into_column(const int col, const Colour c){
-	if(col > NCOLS || col < 0){
+	if(col >= NCOLS || col < 0){
 		return MOVE_OUT_OF_RANGE;
 	}
 	int num_entries = num_col_entries[col];
 	if(num_entries == NROWS){
-	std::cout << "3\n";
 		return MOVE_COLUMN_FULL;
 	}
 	grid[(NROWS - 1 - num_entries)][col] = c;
@@ -90,8 +89,44 @@ Colour Board::check_vertical_win() const {
 	return NONE;
 }
 
+// This is a lazy way of checking for a diagonal win.
+// Basically take the top 3 rows and look for diagonal wins going down from these rows.
+// Also don't bother checking for left diagonal wins if it's near the left edge, 
+// and the same for the right edge.
 Colour Board::check_diagonal_win() const {
-	// TODO
+	for(int i = 0; i < 3; i++){ // note only first three rows
+		for(int j = 0; j < NCOLS; j++){
+			Colour c = grid[i][j];
+			if(c == NONE){
+				continue;
+			}
+			if(j < NCOLS - 3){ // check going down and right
+				bool win = true;
+				for(int n = 1; n < 4; n++){ // note n starts at 1
+					if(grid[i + n][j + n] != c){
+						win = false;
+						break;
+					}
+				}
+				if(win){
+					return c;
+				}
+			}
+			if(j > 3){ // check going down and left
+				bool win = true;
+				for(int n = 1; n < 4; n++){ // note n starts at 1
+					if(grid[i + n][j - n] != c){
+						std::cout << "FAILED i=" << i + n << ", j=" << j - n << "\n";
+						win = false;
+						break;
+					}
+				}
+				if(win){
+					return c;
+				}
+			}
+		}
+	}
 	return NONE;
 }
 
