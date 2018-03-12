@@ -13,28 +13,25 @@ int main(void){
 		} else {
 			std::cout << "Red player select a column:\n";
 		}
-		Move_result res = MOVE_OK;
+		Move_result res;
 		do {
 			int col;
 			std::cin >> col;
-			// TODO: check error codes
 			res = b.insert_into_column(col, player);
 			if(res == MOVE_OUT_OF_RANGE){
 				std::cout << "Please enter a valid column number.\n";
 			} else if(res == MOVE_COLUMN_FULL){
 				std::cout << "Please select a non-full column.\n";
+			} else if(res == MOVE_WIN){
+				b.print();
+				if(player == YELLOW){
+					std::cout << "Yellow won!\n";
+				} else {
+					std::cout << "Red won!\n";
+				}
+				return 0;
 			}
 		}while(res != MOVE_OK);
-		Colour winner = b.check_win();
-		if(winner != NONE){
-			b.print();
-			if(winner == YELLOW){
-				std::cout << "Yellow won!\n";
-			} else {
-				std::cout << "Red won!\n";
-			}
-			return 0;
-		}
 		if(player == YELLOW){
 			player = RED;
 		} else {

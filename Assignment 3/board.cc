@@ -35,115 +35,59 @@ Move_result Board::insert_into_column(const int col, const Colour c){
 	}
 	grid[(NROWS - 1 - num_entries)][col] = c;
 	num_col_entries[col]++;
+	if(is_winning_move(c, NROWS - 1 - num_entries, col)){
+		return MOVE_WIN;
+	}
 	return MOVE_OK;
 }
 
 // TODO: try get this working without using C functions
 void Board::clear_old_printed_board() const{
-	printf("\033[2J\033[1;1H");
+	//printf("\033[2J\033[1;1H");
 }
 
-// Note only need to check up to NCOLS - 3
-Colour Board::check_horizontal_win() const {
-	for(int i = 0; i < NROWS; i++){
-		for(int j = 0; j < NCOLS - 3; j++){
-			Colour c = grid[i][j];
-			if(c == NONE){
-				continue;
-			}
-			bool win = true;
-			for(int n = 1; n < 4; n++){ // note n starts at 1
-				if(grid[i][j + n] != c){
-					win = false;
-					break;
-				}
-			}
-			if(win){
-				return c;
-			}
+// In a horizontal win situation we check the entire row of the most recent
+// insertion for 4 of the same colour in a row.
+bool Board::check_horizontal_win(const Colour c, const int row, const int col) const {
+	for(int i = 0; i < NCOLS; i++){
+		int count  = 0;
+		for(int n = i; grid[row][n] == c && n - i < 4; n++){
+			count++;
+		}
+		if(count == 4){
+			return true;
 		}
 	}
-	return NONE;
+	return false;
 }
 
-// Note only need to check up to NROWS - 3
-Colour Board::check_vertical_win() const {
-	for(int j = 0; j < NCOLS; j++){
-		for(int i = 0; i < NROWS - 3; i++){
-			Colour c = grid[i][j];
-			if(c == NONE){
-				continue;
-			}
-			bool win = true;
-			for(int n = 1; n < 4; n++){ // note n starts at 1
-				if(grid[i + n][j] != c){
-					win = false;
-					break;
-				}
-			}
-			if(win){
-				return c;
-			}
+// In a vertical win situation we take the row and column of the most recent
+// insertion and search for 3 matching colours below that position
+bool Board::check_vertical_win(const Colour c, const int row, const int col) const {
+	for(int n = 1; n < 4; n++){ // note n starts at 1
+		if(grid[row + n][col] != c){
+			return false;
 		}
 	}
-	return NONE;
+	return true;
 }
 
-// This is a lazy way of checking for a diagonal win.
-// Basically take the top 3 rows and look for diagonal wins going down from these rows.
-// Also don't bother checking for left diagonal wins if it's near the left edge, 
-// and the same for the right edge.
-Colour Board::check_diagonal_win() const {
-	for(int i = 0; i < 3; i++){ // note only first three rows
-		for(int j = 0; j < NCOLS; j++){
-			Colour c = grid[i][j];
-			if(c == NONE){
-				continue;
-			}
-			if(j < NCOLS - 3){ // check going down and right
-				bool win = true;
-				for(int n = 1; n < 4; n++){ // note n starts at 1
-					if(grid[i + n][j + n] != c){
-						win = false;
-						break;
-					}
-				}
-				if(win){
-					return c;
-				}
-			}
-			if(j > 3){ // check going down and left
-				bool win = true;
-				for(int n = 1; n < 4; n++){ // note n starts at 1
-					if(grid[i + n][j - n] != c){
-						std::cout << "FAILED i=" << i + n << ", j=" << j - n << "\n";
-						win = false;
-						break;
-					}
-				}
-				if(win){
-					return c;
-				}
-			}
-		}
-	}
-	return NONE;
+// TODO: fix this
+bool Board::check_diagonal_win(const Colour c, const int row, const int col) const {
+	return false;
 }
 
-Colour Board::check_win() const {
-	Colour c = check_horizontal_win();
-	if(c != NONE){
-		return c;
+bool Board::is_winning_move(const Colour c, const int row, const int col) const {
+	if(check_diagonal_win(c, row, col)){
+		return true;
 	}
-	c = check_vertical_win();
-	if(c != NONE){
-		return c;
+	if(check_vertical_win(c, row, col)){
+		return true;
 	}
-	c = check_diagonal_win();
-	if(c != NONE){
-		return c;
+	if(check_horizontal_win(c, row, col)){
+		return true;
 	}
-	return NONE;
+	return false;
 }
 
 void Board::print() const {
