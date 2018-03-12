@@ -43,7 +43,7 @@ Move_result Board::insert_into_column(const int col, const Colour c){
 
 // TODO: try get this working without using C functions
 void Board::clear_old_printed_board() const{
-	//printf("\033[2J\033[1;1H");
+	printf("\033[2J\033[1;1H");
 }
 
 // In a horizontal win situation we check the entire row of the most recent
@@ -72,13 +72,47 @@ bool Board::check_vertical_win(const Colour c, const int row, const int col) con
 	return true;
 }
 
-// TODO: fix this
-bool Board::check_diagonal_win(const Colour c, const int row, const int col) const {
+// Unlike the other win checkers this does not use the most recent move's location.
+// Basically take the top 3 rows and look for diagonal wins going down from these rows.
+// Also don't bother checking for left diagonal wins if it's near the left edge, 
+// and the same for the right edge.
+bool Board::check_diagonal_win(const Colour c) const {
+	for(int i = 0; i < 3; i++){ // note only first three rows
+		for(int j = 0; j < NCOLS; j++){
+			if(grid[i][j] != c){
+				continue;
+			}
+			if(j < NCOLS - 3){ // check going down and right
+				bool win = true;
+				for(int n = 1; n < 4; n++){ // note n starts at 1
+					if(grid[i + n][j + n] != c){
+						win = false;
+						break;
+					}
+				}
+				if(win){
+					return true;
+				}
+			}
+			if(j >= 3){ // check going down and left
+				bool win = true;
+				for(int n = 1; n < 4; n++){ // note n starts at 1
+					if(grid[i + n][j - n] != c){
+						win = false;
+						break;
+					}
+				}
+				if(win){
+					return true;
+				}
+			}
+		}
+	}
 	return false;
 }
 
 bool Board::is_winning_move(const Colour c, const int row, const int col) const {
-	if(check_diagonal_win(c, row, col)){
+	if(check_diagonal_win(c)){
 		return true;
 	}
 	if(check_vertical_win(c, row, col)){

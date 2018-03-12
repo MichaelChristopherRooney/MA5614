@@ -27,6 +27,6 @@ private:
 	void clear_old_printed_board() const;
 	bool check_horizontal_win(const Colour c, const int row, const int col) const;
 	bool check_vertical_win(const Colour c, const int row, const int col) const;
-	bool check_diagonal_win(const Colour c, const int row, const int col) const;
+	bool check_diagonal_win(const Colour c) const;
 	bool is_winning_move(const Colour c, const int row, const int col) const;
 };
