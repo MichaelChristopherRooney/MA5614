@@ -20,11 +20,13 @@ Colour Board::get_colour_at_pos(const int x, const int y) const {
 	return grid[x][y];
 }
 
-// If the column is full returns 1
-// If the index is out of range returns 2
-// Otherwise returns 0.
+// If the column is full returns MOVE_COLUMN_FULL
+// If the index is out of range returns MOVE_OUT_OF_RANGE
+// If winning move returns MOVE_WIN
+// Otherwise returns MOVE_OK.
 // For each column we track how many tokens are in it already.
 // We this to find the highest free index, which we take as the "bottom".
+// TODO: what if the board is full ?
 Move_result Board::insert_into_column(const int col, const Colour c){
 	if(col >= NCOLS || col < 0){
 		return MOVE_OUT_OF_RANGE;
