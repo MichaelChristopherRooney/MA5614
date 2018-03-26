@@ -23,6 +23,7 @@ enum Player_type read_player_type(){
 }
 
 void setup_game(){
+	srand(time(NULL)); // for computer's random moves
 	std::cout << "Is the red player human (h) or computer (c)?\n";
 	enum Player_type t = read_player_type();
 	p1 = new Player(t, RED);
@@ -34,12 +35,12 @@ void setup_game(){
 
 int main(void){
 	setup_game();
-	Board b;
+	Board *b = new Board();;
 	while(1){
-		b.print();
+		b->print();
 		int result = cur->make_move(b);
 		if(result == 1){ // returns 1 if the player won
-			b.print();
+			b->print();
 			if(cur->get_colour() == YELLOW){
 				std::cout << "Yellow won!\n";
 			} else {

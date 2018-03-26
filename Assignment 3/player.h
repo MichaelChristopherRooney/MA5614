@@ -10,12 +10,13 @@ enum Player_type {
 class Player {
 public:
 	Player(enum Player_type type, enum Colour c);
-	int make_move(Board& b) const;
+	int make_move(Board *b) const;
 	enum Colour get_colour() const;
 	
 private:
 	Player(); // disable default
-	int computer_make_move(Board& b) const;
+	int computer_make_move(Board *b) const;
+	int computer_make_optimal_move(Board *b) const;
 	enum Player_type type;
 	enum Colour colour;
 };

@@ -20,6 +20,18 @@ Colour Board::get_colour_at_pos(const int x, const int y) const {
 	return grid[x][y];
 }
 
+// Reverts a previous play made by a computer play
+// Computer can test if a play is a winner, then undo it with this.
+void Board::remove_from_column(const int col){	
+	if(col >= this->NCOLS || col < 0){
+		return;
+	}
+	this->num_col_entries[col]--;
+	this->num_entries--;
+	int col_size = this->num_col_entries[col];
+	this->grid[(NROWS - 1 - col_size)][col] = NONE;
+}
+
 // If the column is full returns MOVE_COLUMN_FULL
 // If the index is out of range returns MOVE_OUT_OF_RANGE
 // If winning move returns MOVE_WIN
@@ -28,16 +40,21 @@ Colour Board::get_colour_at_pos(const int x, const int y) const {
 // We this to find the highest free index, which we take as the "bottom".
 // TODO: what if the board is full ?
 Move_result Board::insert_into_column(const int col, const Colour c){
-	if(col >= NCOLS || col < 0){
+	if(this->num_entries == MAX_ENTRIES){
+		printf("Board is full - tie game!\n");
+		exit(1);
+	}	
+	if(col >= this->NCOLS || col < 0){
 		return MOVE_OUT_OF_RANGE;
 	}
-	int num_entries = num_col_entries[col];
-	if(num_entries == NROWS){
+	int col_size = num_col_entries[col];
+	if(col_size == NROWS){
 		return MOVE_COLUMN_FULL;
 	}
-	grid[(NROWS - 1 - num_entries)][col] = c;
-	num_col_entries[col]++;
-	if(is_winning_move(c, NROWS - 1 - num_entries, col)){
+	this->grid[(NROWS - 1 - col_size)][col] = c;
+	this->num_col_entries[col]++;
+	this->num_entries++;
+	if(is_winning_move(c, this->NROWS - 1 - col_size, col)){
 		return MOVE_WIN;
 	}
 	return MOVE_OK;
@@ -53,7 +70,7 @@ void Board::clear_old_printed_board() const{
 bool Board::check_horizontal_win(const Colour c, const int row, const int col) const {
 	for(int i = 0; i < NCOLS; i++){
 		int count  = 0;
-		for(int n = i; grid[row][n] == c && n - i < 4; n++){
+		for(int n = i; grid[row][n] == c && n < NCOLS; n++){
 			count++;
 		}
 		if(count == 4){
