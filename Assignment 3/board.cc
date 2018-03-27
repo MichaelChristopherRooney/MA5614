@@ -22,14 +22,33 @@ Colour Board::get_colour_at_pos(const int x, const int y) const {
 
 // Reverts a previous play made by a computer play
 // Computer can test if a play is a winner, then undo it with this.
-void Board::remove_from_column(const int col){	
+void Board::remove_from_column_for_computer(const int col){	
 	if(col >= this->NCOLS || col < 0){
 		return;
 	}
 	this->num_col_entries[col]--;
-	this->num_entries--;
 	int col_size = this->num_col_entries[col];
 	this->grid[(NROWS - 1 - col_size)][col] = NONE;
+}
+
+// Same as "insert_into_column" function, but does not check if the board is full
+// and does not increase the max_entries counter.
+// This avoids issues where the board becomes full when checking for winning moves.
+// Used to probe possible win states.
+Move_result Board::insert_into_column_for_computer_probing(const int col, const Colour c){
+	if(col >= this->NCOLS || col < 0){
+		return MOVE_OUT_OF_RANGE;
+	}
+	int col_size = num_col_entries[col];
+	if(col_size == NROWS){
+		return MOVE_COLUMN_FULL;
+	}
+	this->grid[(NROWS - 1 - col_size)][col] = c;
+	this->num_col_entries[col]++;
+	if(is_winning_move(c, this->NROWS - 1 - col_size, col)){
+		return MOVE_WIN;
+	}
+	return MOVE_OK;
 }
 
 // If the column is full returns MOVE_COLUMN_FULL
@@ -38,12 +57,7 @@ void Board::remove_from_column(const int col){
 // Otherwise returns MOVE_OK.
 // For each column we track how many tokens are in it already.
 // We this to find the highest free index, which we take as the "bottom".
-// TODO: what if the board is full ?
-Move_result Board::insert_into_column(const int col, const Colour c){
-	if(this->num_entries == MAX_ENTRIES){
-		printf("Board is full - tie game!\n");
-		exit(1);
-	}	
+Move_result Board::insert_into_column(const int col, const Colour c){	
 	if(col >= this->NCOLS || col < 0){
 		return MOVE_OUT_OF_RANGE;
 	}
@@ -56,6 +70,11 @@ Move_result Board::insert_into_column(const int col, const Colour c){
 	this->num_entries++;
 	if(is_winning_move(c, this->NROWS - 1 - col_size, col)){
 		return MOVE_WIN;
+	}
+	if(this->num_entries == MAX_ENTRIES){
+		print();
+		printf("Board is full - tie game!\n");
+		exit(1);
 	}
 	return MOVE_OK;
 }

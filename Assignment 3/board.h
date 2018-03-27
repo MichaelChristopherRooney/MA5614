@@ -17,9 +17,10 @@ class Board {
 public:
 	Board();
 	Move_result insert_into_column(const int col, const Colour c);
+	Move_result insert_into_column_for_computer_probing(const int col, const Colour c);
 	Colour get_colour_at_pos(const int x, const int y) const;
 	void print() const;
-	void remove_from_column(const int col);
+	void remove_from_column_for_computer(const int col);
 	static const int NROWS = 6;
 	static const int NCOLS = 7;
 	static const int MAX_ENTRIES = NROWS*NCOLS;
