@@ -1,3 +1,5 @@
+#pragma once
+
 class Fish {
 public:
 	int get_x_pos() const;

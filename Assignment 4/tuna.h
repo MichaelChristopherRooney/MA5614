@@ -1,3 +1,5 @@
+#pragma once
+
 #include "fish.h"
 
 class Tuna : public Fish {

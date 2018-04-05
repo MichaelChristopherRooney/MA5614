@@ -1,4 +1,4 @@
-OBJECTS = main.o fish.o shark.o minnow.o tuna.o grid.o
+OBJECTS = main.o fish.o shark.o minnow.o tuna.o grid.o point.o
 EXEC_NAME = prog
 CC = g++
 CFLAGS = -Wall
@@ -21,8 +21,11 @@ tuna.o: tuna.cc tuna.h fish.h
 minnow.o: minnow.cc minnow.h fish.h
 	$(CC) -c minnow.cc $(CFLAGS)
 
-grid.o: grid.cc grid.h
+grid.o: grid.cc grid.h point.h
 	$(CC) -c grid.cc $(CFLAGS)
+
+point.o: point.cc point.h
+	$(CC) -c point.cc $(CFLAGS)
 
 clean:
 	rm -f $(OBJECTS) $(EXEC_NAME)
