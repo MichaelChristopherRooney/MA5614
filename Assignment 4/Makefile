@@ -1,25 +1,17 @@
-OBJECTS = main.o fish.o shark.o minnow.o tuna.o grid.o point.o
+OBJECTS = main.o fishes.o grid.o point.o
 EXEC_NAME = prog
 CC = g++
-CFLAGS = -Wall
+CFLAGS = -Wall -Wextra
 
-all: main.o fish.o shark.o minnow.o tuna.o grid.o
-	$(CC) -o $(EXEC_NAME) main.o fish.o shark.o $(CFLAGS)
+all: main.o fishes.o grid.o point.o
+	$(CC) -o $(EXEC_NAME) main.o fishes.o grid.o point.o $(CFLAGS)
 
-main.o: main.cc fish.h
+main.o: main.cc fishes.h grid.h
 	$(CC) -c main.cc $(CFLAGS)
 
-fish.o: fish.cc fish.h
-	$(CC) -c fish.cc $(CFLAGS)
+fishes.o: fishes.cc fishes.h
+	$(CC) -c fishes.cc $(CFLAGS)
 
-shark.o: shark.cc shark.h fish.h
-	$(CC) -c shark.cc $(CFLAGS)
-
-tuna.o: tuna.cc tuna.h fish.h
-	$(CC) -c tuna.cc $(CFLAGS)
-
-minnow.o: minnow.cc minnow.h fish.h
-	$(CC) -c minnow.cc $(CFLAGS)
 
 grid.o: grid.cc grid.h point.h
 	$(CC) -c grid.cc $(CFLAGS)

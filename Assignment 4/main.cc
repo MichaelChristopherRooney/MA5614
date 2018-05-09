@@ -1,7 +1,9 @@
-#include "shark.h"
+#include "grid.h"
 
 int main(void){
-	Shark s;
-	s.make_move();
+	Grid *g = new Grid();
+	g->print();
+	g->update();
+	delete(g);
 	return 0;
 }

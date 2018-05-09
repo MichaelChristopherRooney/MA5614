@@ -2,21 +2,17 @@
 
 #include <vector>
 
-#include "shark.h"
-#include "tuna.h"
-#include "minnow.h"
+#include "fishes.h"
 
 class Point {
 public:
+	void move_fish_to_here(enum FISH_TYPE type, Fish *f);
 	int get_num_sharks() const;
 	int get_num_tuna() const;
 	int get_num_minnows() const;
 private:
-	int num_sharks;
-	int num_tuna;
-	int num_minnows;
-	std::vector<Shark> sharks;
-	std::vector<Tuna> tuna;
-	std::vector<Minnow> minnows;
+	std::vector<Shark *> sharks;
+	std::vector<Tuna *> tunas;
+	std::vector<Minnow *> minnows;
 };
 
