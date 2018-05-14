@@ -16,6 +16,8 @@ public:
 	void print() const;
 	void update();
 	Point *get_point_at(int x, int y, int z);
+	void add_minnow(Minnow *m);
+	int get_iteration_number() const;
 private:
 	void randomly_fill();
 	int find_fish(std::vector<Fish *> *vec) const;
@@ -23,4 +25,5 @@ private:
 	std::vector<Minnow *> minnows;
 	std::vector<Tuna *> tunas;
 	std::vector<Shark *> sharks;
+	int iteration_number = 0;
 };

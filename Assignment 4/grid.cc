@@ -59,6 +59,10 @@ Point *Grid::get_point_at(int x, int y, int z){
 	return points[x][y][z];
 }
 
+int Grid::get_iteration_number() const {
+	return iteration_number;
+}
+
 // A helper function that randomly selects a given fish from a vector.
 int Grid::find_fish(std::vector<Fish *> *vec) const {
 	if(vec->empty()){
@@ -102,5 +106,11 @@ void Grid::update() {
 			break;
 		}
 	}
+	iteration_number++;
 }
+
+void Grid::add_minnow(Minnow *m){
+	minnows.push_back(m);
+}
+
 
