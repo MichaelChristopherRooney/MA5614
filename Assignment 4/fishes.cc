@@ -23,14 +23,6 @@ Point *Fish::get_point() const {
 	return p;
 }
 
-void Fish::set_last_move(int last_move){
-	this->last_move = last_move;
-}
-
-int Fish::get_last_move() const {
-	return last_move;
-}	
-
 //////////////////////////////////////////////////////
 // Tuna functions
 //////////////////////////////////////////////////////
@@ -38,8 +30,7 @@ int Fish::get_last_move() const {
 // Moves diagonally 
 // First randomly move up or down (y-axis)
 // Then move randomly up or down in either the x or z axis
-void Tuna::update(Grid *g, int update_num) {
-	set_last_move(update_num);
+void Tuna::update(Grid *g) {
 	int pos[3]; // xyz
 	pos[X_AXIS] = get_point()->get_x_pos();
 	pos[Y_AXIS] = get_point()->get_y_pos() + ((rand() % 2) == 0 ? -1 : 1); // move up or down 1 block in y axis
@@ -70,8 +61,7 @@ void Tuna::update(Grid *g, int update_num) {
 // Shark functions
 //////////////////////////////////////////////////////
 
-void Shark::update(Grid *g, int update_num){
-	set_last_move(update_num);
+void Shark::update(Grid *g){
 	int pos[3]; // xyz
 	pos[X_AXIS] = get_point()->get_x_pos();
 	pos[Y_AXIS] = get_point()->get_y_pos();
@@ -113,8 +103,7 @@ void Shark::update(Grid *g, int update_num){
 // Can move to any neighbouring site.
 // First pick an axis, then a direction.
 // If new position is invalid we need to apply periodic boundary conditions.
-void Minnow::update(Grid *g, int update_num) {
-	set_last_move(update_num);
+void Minnow::update(Grid *g) {
 	int pos[3]; // xyz
 	pos[0] = get_point()->get_x_pos();
 	pos[1] = get_point()->get_y_pos();

@@ -1,6 +1,10 @@
 #include "point.h"
 #include "grid.h"
 
+#include <random>
+#include <iostream>
+#include <algorithm>
+
 Point::Point(int x, int y, int z, Grid *g) {
 	this->grid = g;
 	this->x = x;
@@ -8,39 +12,38 @@ Point::Point(int x, int y, int z, Grid *g) {
 	this->z = z;
 }
 
-void Point::update(int update_num){
-	auto s_it = sharks.begin();
-	while(s_it != sharks.end()){
-		if((*s_it)->get_last_move() == update_num){ // already moved this turn
-			s_it++;
-		} else {
-			(*s_it)->update(grid, update_num);
-			s_it = sharks.erase(s_it);
-		}
-
+void Point::remove_fish(enum FISH_TYPE type, Fish *f){
+	switch(type){
+		case SHARK:
+			sharks.erase(std::remove(sharks.begin(), sharks.end(), (Shark *)f), sharks.end());
+			break;
+		case TUNA:
+			tunas.erase(std::remove(tunas.begin(), tunas.end(), (Tuna *)f), tunas.end());
+			break;
+		case MINNOW:
+			minnows.erase(std::remove(minnows.begin(), minnows.end(), (Minnow *)f), minnows.end());
+			break;
 	}
-	auto t_it = tunas.begin();
-	while(t_it != tunas.end()){
-		if((*t_it)->get_last_move() == update_num){ // already moved this turn
-			t_it++; 
-		} else {
-			(*t_it)->update(grid, update_num);
-			t_it = tunas.erase(t_it);
-		}
+}
 
-	}
-	auto m_it = minnows.begin();
-	while(m_it != minnows.end()){
-		if((*m_it)->get_last_move() == update_num){ // already moved this turn
-			m_it++; 
-		} else {
-			(*m_it)->update(grid, update_num);
-			m_it = minnows.erase(m_it);
-		}
+// Used when intially spawning fish rather than them moving here
+void Point::create_fish_here(enum FISH_TYPE type, Fish *f){
+	f->set_point(this);
+	switch(type){
+		case SHARK:
+			sharks.push_back((Shark *)f);
+			break;
+		case TUNA:
+			tunas.push_back((Tuna *)f);
+			break;
+		case MINNOW:
+			minnows.push_back((Minnow *)f);
+			break;
 	}
 }
 
 void Point::move_fish_to_here(enum FISH_TYPE type, Fish *f) {
+	f->get_point()->remove_fish(type, f);
 	f->set_point(this);
 	switch(type){
 		case SHARK:

@@ -3,9 +3,9 @@
 int main(void){
 	Grid *g = new Grid();
 	g->print();
-	g->update(0);
+	g->update();
 	g->print();
-	g->update(1);
+	g->update();
 	delete(g);
 	return 0;
 }

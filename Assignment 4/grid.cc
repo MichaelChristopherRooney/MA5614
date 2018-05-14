@@ -1,5 +1,6 @@
 #include "grid.h"
 #include "point.h"
+#include "fishes.h"
 
 #include <iostream>
 #include <random>
@@ -23,13 +24,16 @@ void Grid::randomly_fill() {
 				int num = distr(eng);
 				if(num == 1){
 					Tuna *t = new Tuna();
-					points[x][y][z]->move_fish_to_here(TUNA, t);
+					points[x][y][z]->create_fish_here(TUNA, t);
+					tunas.push_back(t);
 				} else if(num == 2){
 					Shark *s = new Shark();
-					points[x][y][z]->move_fish_to_here(SHARK, s);
+					points[x][y][z]->create_fish_here(SHARK, s);
+					sharks.push_back(s);
 				} else if(num == 3){
 					Minnow *m = new Minnow();
-					points[x][y][z]->move_fish_to_here(MINNOW, m);
+					points[x][y][z]->create_fish_here(MINNOW, m);
+					minnows.push_back(m);
 				} // else nothing at that particular point
 			}
 		}
@@ -55,13 +59,47 @@ Point *Grid::get_point_at(int x, int y, int z){
 	return points[x][y][z];
 }
 
-void Grid::update(int update_num) {
-	for(int x = 0; x < GRID_SIZE; x++){
-		for(int y = 0; y < GRID_SIZE; y++){
-			for(int z = 0; z < GRID_SIZE; z++){
-				Point *p = points[x][y][z];
-				p->update(update_num);
+// A helper function that randomly selects a given fish from a vector.
+int Grid::find_fish(std::vector<Fish *> *vec) const {
+	if(vec->empty()){
+		return -1;
+	}
+	return (rand() % vec->size());
+}
+
+// As per the assignment description a single species is chosen and a single 
+// member of that species has a 90% chance to move.
+// This is repeated L^3 times.
+void Grid::update() {
+	for(int i = 0; i < GRID_SIZE * GRID_SIZE * GRID_SIZE; i++){
+		int will_move = ((rand() % 10) + 1) == 10 ? 0 : 1;
+		if(!will_move){
+			continue;
+		}
+		int species = (rand() % 3);
+		int index;
+		switch(species){
+		case TUNA:
+			index = find_fish((std::vector<Fish *> *)&tunas);
+			if(index == -1){ // no fish in this species to move
+				return;
 			}
+			tunas[index]->update(this);
+			break;
+		case SHARK:
+			index = find_fish((std::vector<Fish *> *)&sharks);
+			if(index == -1){ // no fish in this species to move
+				return;
+			}
+			sharks[index]->update(this);
+			break;
+		case MINNOW:
+			index = find_fish((std::vector<Fish *> *)&minnows);
+			if(index == -1){ // no fish in this species to move
+				return;
+			}
+			minnows[index]->update(this);	
+			break;
 		}
 	}
 }
