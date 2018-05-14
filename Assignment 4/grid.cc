@@ -1,4 +1,5 @@
 #include "grid.h"
+#include "point.h"
 
 #include <iostream>
 #include <random>
@@ -6,7 +7,7 @@
 using namespace std;
 
 Grid::Grid() {
-	points = vector<vector<vector<Point> > >(GRID_SIZE,vector<vector<Point> >(GRID_SIZE,vector <Point>(GRID_SIZE)));
+	points = vector<vector<vector<Point *> > >(GRID_SIZE,vector<vector<Point *> >(GRID_SIZE,vector <Point *>(GRID_SIZE)));
 	randomly_fill();
 }
 
@@ -18,16 +19,17 @@ void Grid::randomly_fill() {
 	for(int x = 0; x < GRID_SIZE; x++){
 		for(int y = 0; y < GRID_SIZE; y++){
 			for(int z = 0; z < GRID_SIZE; z++){
+				points[x][y][z] = new Point(x, y, z, this);
 				int num = distr(eng);
 				if(num == 1){
 					Tuna *t = new Tuna();
-					points[x][y][z].move_fish_to_here(TUNA, t);
+					points[x][y][z]->move_fish_to_here(TUNA, t);
 				} else if(num == 2){
 					Shark *s = new Shark();
-					points[x][y][z].move_fish_to_here(SHARK, s);
+					points[x][y][z]->move_fish_to_here(SHARK, s);
 				} else if(num == 3){
 					Minnow *m = new Minnow();
-					points[x][y][z].move_fish_to_here(MINNOW, m);
+					points[x][y][z]->move_fish_to_here(MINNOW, m);
 				} // else nothing at that particular point
 			}
 		}
@@ -38,35 +40,29 @@ void Grid::print() const {
 	for(int x = 0; x < GRID_SIZE; x++){
 		for(int y = 0; y < GRID_SIZE; y++){
 			for(int z = 0; z < GRID_SIZE; z++){
-				Point p = points[x][y][z];
+				Point *p = points[x][y][z];
+				if(p->get_num_sharks() == 0 && p->get_num_tuna() == 0 && p->get_num_minnows() == 0){
+					continue;
+				}
 				std::cout << "[" << x << "][" << y << "][" << z << "] contains: ";
-				std::cout << p.get_num_sharks() << " sharks, " << p.get_num_tuna() << " tuna, " << p.get_num_minnows() << " minnows.\n";
+				std::cout << p->get_num_sharks() << " sharks, " << p->get_num_tuna() << " tuna, " << p->get_num_minnows() << " minnows.\n";
 			}
 		}
 	}
 }
 
-void Grid::update() {
+Point *Grid::get_point_at(int x, int y, int z){
+	return points[x][y][z];
+}
+
+void Grid::update(int update_num) {
 	for(int x = 0; x < GRID_SIZE; x++){
 		for(int y = 0; y < GRID_SIZE; y++){
 			for(int z = 0; z < GRID_SIZE; z++){
-				update_point(x, y, z);
+				Point *p = points[x][y][z];
+				p->update(update_num);
 			}
 		}
-	}
-}
-
-// TODO
-void Grid::update_point(int x, int y, int z){
-	Point p = points[x][y][z];
-	if(p.get_num_sharks() > 0){
-		std::cout << "[" << x << "][" << y << "][" << z << "] move shark\n";
-	}
-	if(p.get_num_tuna() > 0){
-		std::cout << "[" << x << "][" << y << "][" << z << "] move tuna\n";
-	}
-	if(p.get_num_minnows() > 0){
-		std::cout << "[" << x << "][" << y << "][" << z << "] move minnow\n";
 	}
 }
 

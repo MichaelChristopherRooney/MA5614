@@ -2,16 +2,16 @@
 
 #include <vector>
 
-#include "point.h"
+class Point; // forward declaration
 
 class Grid {
 public:
 	static const int GRID_SIZE = 5;
 	Grid();
 	void print() const;
-	void update();
+	void update(int update_num);
+	Point *get_point_at(int x, int y, int z);
 private:
 	void randomly_fill();
-	void update_point(int x, int y, int z);
-	std::vector<std::vector<std::vector<Point> > > points; // 3D grid of points
+	std::vector<std::vector<std::vector<Point *> > > points; // 3D grid of points
 };

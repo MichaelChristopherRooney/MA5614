@@ -6,17 +6,17 @@ CFLAGS = -Wall -Wextra
 all: main.o fishes.o grid.o point.o
 	$(CC) -o $(EXEC_NAME) main.o fishes.o grid.o point.o $(CFLAGS)
 
-main.o: main.cc fishes.h grid.h
+main.o: main.cc fishes.h grid.h point.h
 	$(CC) -c main.cc $(CFLAGS)
 
-fishes.o: fishes.cc fishes.h
+fishes.o: fishes.cc fishes.h grid.h point.h
 	$(CC) -c fishes.cc $(CFLAGS)
 
 
-grid.o: grid.cc grid.h point.h
+grid.o: grid.cc fishes.h grid.h point.h
 	$(CC) -c grid.cc $(CFLAGS)
 
-point.o: point.cc point.h
+point.o: point.cc fishes.h grid.h point.h
 	$(CC) -c point.cc $(CFLAGS)
 
 clean:

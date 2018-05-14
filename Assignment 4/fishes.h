@@ -1,5 +1,7 @@
 #pragma once
 
+#include "grid.h"
+
 enum FISH_TYPE {
 	TUNA,
 	SHARK,
@@ -8,19 +10,19 @@ enum FISH_TYPE {
 
 class Fish {
 public:
-	int get_x_pos() const;
-	int get_y_pos() const;
-	int get_z_pos() const;
-	virtual void update() = 0;
+	virtual void update(Grid *g, int update_num) = 0;
+	Point *get_point() const;
+	void set_point(Point *p);
+	int get_last_move() const;
+	void set_last_move(int last_move);
 private:
-	int x_pos;
-	int y_pos;
-	int z_pos;
+	Point *p;
+	int last_move = -1;
 };
 
 class Tuna : public Fish {
 public:
-	void update();
+	void update(Grid *g, int update_num);
 private:
 	bool has_eaten = false;
 	int last_eaten = -1; // number of the iteration when it last ate
@@ -28,7 +30,7 @@ private:
 
 class Shark : public Fish {
 public:
-	void update();
+	void update(Grid *g, int update_num);
 private:
 	bool has_eaten = false;
 	int last_eaten = -1; // number of the iteration when it last ate
@@ -36,5 +38,5 @@ private:
 
 class Minnow : public Fish {
 public:
-	void update();
+	void update(Grid *g, int update_num);
 };
