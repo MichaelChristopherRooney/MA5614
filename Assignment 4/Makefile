@@ -1,7 +1,7 @@
 OBJECTS = main.o fishes.o grid.o point.o
 EXEC_NAME = prog
 CC = g++
-CFLAGS = -Wall -Wextra
+CFLAGS = -Wall -Wextra -g
 
 all: main.o fishes.o grid.o point.o
 	$(CC) -o $(EXEC_NAME) main.o fishes.o grid.o point.o $(CFLAGS)

@@ -12,6 +12,7 @@ Point::Point(int x, int y, int z, Grid *g) {
 	this->z = z;
 }
 
+// Used for when the fish is leaving this point - NOT for when the fish is eaten
 void Point::remove_fish(enum FISH_TYPE type, Fish *f){
 	switch(type){
 		case SHARK:
@@ -40,6 +41,16 @@ void Point::create_fish_here(enum FISH_TYPE type, Fish *f){
 			minnows.push_back((Minnow *)f);
 			break;
 	}
+}
+
+// Deletes all minnows at this point.
+// Also ensures they are removed from the grid.
+void Point::delete_minnows_here(){
+	grid->delete_all_minnows_from_point(&minnows);
+	for(auto it = minnows.begin(); it != minnows.end(); it++){
+		free(*it);
+	}
+	minnows.clear();
 }
 
 // This will modify the events array.
@@ -111,27 +122,56 @@ enum EVENT Point::pick_event() const {
 void Point::handle_event(enum EVENT e){
 	switch(e){
 	case NEW_MINNOWS:
-/*
 		for(int i = 0; i < 3; i++){
 			Minnow *m = new Minnow();
-			minnows.push_back(m);
+			create_fish_here(MINNOW, m);
 			grid->add_minnow(m);
 		}
-		*/
+		std::cout << "Spawning minnows\n";
 		break;
-	case NEW_TUNA:
+	case NEW_TUNA: {
+		Tuna *t = new Tuna();
+		create_fish_here(TUNA, t);
+		grid->add_tuna(t);
+		std::cout << "Spawning tuna\n";
 		break;
-	case NEW_SHARK:
+	}
+	case NEW_SHARK:{
+		Shark *s = new Shark();
+		create_fish_here(SHARK, s);
+		grid->add_shark(s);
+		std::cout << "Spawning shark\n";
 		break;
-	case TUNA_EAT_MINNOWS:
+	}
+	case TUNA_EAT_MINNOWS: // just pick the first tuna to be the one who eats
+		std::cout << "Tuna eat minnows\n";
+		(*tunas.begin())->has_eaten = true;
+		delete_minnows_here();
 		break;
-	case SHARK_EAT_TUNA:
+	case SHARK_EAT_TUNA: { // just pick the first shark at this point to be the one who eats
+		std::cout << "Shark eat Tuna\n";
+		(*sharks.begin())->has_eaten = true;
+		Tuna *t = *tunas.begin(); // delete the first tuna
+		grid->delete_tuna(t);
+		tunas.erase(std::remove(tunas.begin(), tunas.end(), t), tunas.end()); 
+		free(t);
 		break;
+	}
 	case SHARK_EAT_MINNOWS:
+		std::cout << "Shark eat all minnows in neighbouring sites\n";
+		int x, y, z;
+		for(int i = -1; i <= 1; i++){
+			for(int j = -1; j <= 1; j++){
+				for(int k = -1; k <= 1; k++){
+					x = i + this->x, y = j + this->y, z = k + this->z;
+					Grid::apply_boundary(&x, &y, &z);
+					grid->get_point_at(x, y, z)->delete_minnows_here();
+				}
+			}
+		}
 		break;
 	}
 }
-
 
 void Point::move_fish_to_here(enum FISH_TYPE type, Fish *f) {
 	f->get_point()->remove_fish(type, f);
@@ -148,7 +188,6 @@ void Point::move_fish_to_here(enum FISH_TYPE type, Fish *f) {
 			break;
 	}
 	int num_events = determine_events();
-		std::cout << "Events: " << num_events << "\n";
 	if(num_events > 0){
 		enum EVENT e = pick_event();
 		handle_event(e);

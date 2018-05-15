@@ -20,6 +20,7 @@ public:
 	void create_fish_here(enum FISH_TYPE type, Fish *f);
 	void move_fish_to_here(enum FISH_TYPE type, Fish *f);
 	void remove_fish(enum FISH_TYPE type, Fish *f);
+	void delete_minnows_here();
 	int get_num_sharks() const;
 	int get_num_tuna() const;
 	int get_num_minnows() const;

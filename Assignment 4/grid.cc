@@ -2,6 +2,7 @@
 #include "point.h"
 #include "fishes.h"
 
+#include <algorithm>
 #include <iostream>
 #include <random>
 
@@ -53,6 +54,9 @@ void Grid::print() const {
 			}
 		}
 	}
+	std::cout << sharks.size() << " sharks\n";
+	std::cout << tunas.size() << " tunas\n";
+	std::cout << minnows.size() << " minnows\n";
 }
 
 Point *Grid::get_point_at(int x, int y, int z){
@@ -111,6 +115,42 @@ void Grid::update() {
 
 void Grid::add_minnow(Minnow *m){
 	minnows.push_back(m);
+}
+
+void Grid::add_tuna(Tuna *t){
+	tunas.push_back(t);
+}
+
+void Grid::add_shark(Shark *s){
+	sharks.push_back(s);
+}
+
+// Given the vector of minnows at a point, remove each of these minnows from the 
+// vector of all minnows in the grid.
+void Grid::delete_all_minnows_from_point(std::vector<Minnow *> *vec){
+	for(auto it = vec->begin(); it != vec->end(); it++){
+		minnows.erase(std::remove(minnows.begin(), minnows.end(), *it), minnows.end());
+	}
+}
+
+void Grid::delete_tuna(Tuna *t){
+	tunas.erase(std::remove(tunas.begin(), tunas.end(), t), tunas.end());
+}
+
+// Applies periodic bounary conditions to the passed coordinate.
+void Grid::adjust_coordinatate(int *c){
+	if(*c == Grid::GRID_SIZE){
+		*c = 0;
+	} else if(*c == -1){
+		*c = Grid::GRID_SIZE - 1;
+	}
+}
+
+// Applies periodic boundary conditions to the passed coordinates
+void Grid::apply_boundary(int *x, int *y, int *z){
+	adjust_coordinatate(x);
+	adjust_coordinatate(y);
+	adjust_coordinatate(z);
 }
 
 

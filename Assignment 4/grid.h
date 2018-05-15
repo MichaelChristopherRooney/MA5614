@@ -17,7 +17,13 @@ public:
 	void update();
 	Point *get_point_at(int x, int y, int z);
 	void add_minnow(Minnow *m);
+	void add_tuna(Tuna *t);
+	void add_shark(Shark *s);
 	int get_iteration_number() const;
+	void delete_all_minnows_from_point(std::vector<Minnow *> *vec);
+	void delete_tuna(Tuna *t);
+	static void adjust_coordinatate(int *c);
+	static void apply_boundary(int *x, int *y, int *z);
 private:
 	void randomly_fill();
 	int find_fish(std::vector<Fish *> *vec) const;

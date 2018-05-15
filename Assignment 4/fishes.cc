@@ -50,9 +50,9 @@ void Tuna::update(Grid *g) {
 	} else if(pos[axis] == -1){
 		pos[axis] = 4;
 	}
-	printf("Tuna moved to [%d][%d][%d] from [%d][%d][%d]\n",
-		pos[0], pos[1], pos[2], get_point()->get_x_pos(), get_point()->get_y_pos(), get_point()->get_z_pos()
-	);
+	//printf("Tuna moved to [%d][%d][%d] from [%d][%d][%d]\n",
+	//	pos[0], pos[1], pos[2], get_point()->get_x_pos(), get_point()->get_y_pos(), get_point()->get_z_pos()
+	//);
 	g->get_point_at(pos[0], pos[1], pos[2])->move_fish_to_here(TUNA, this);
 	
 }
@@ -90,9 +90,9 @@ void Shark::update(Grid *g){
 	} else if(pos[axis_2] == -1){
 		pos[axis_2] = 4;
 	}
-	printf("Shark moved to [%d][%d][%d] from [%d][%d][%d]\n",
-		pos[0], pos[1], pos[2], get_point()->get_x_pos(), get_point()->get_y_pos(), get_point()->get_z_pos()
-	);
+	//printf("Shark moved to [%d][%d][%d] from [%d][%d][%d]\n",
+	//	pos[0], pos[1], pos[2], get_point()->get_x_pos(), get_point()->get_y_pos(), get_point()->get_z_pos()
+	//);
 	g->get_point_at(pos[0], pos[1], pos[2])->move_fish_to_here(SHARK, this);
 }
 
@@ -116,8 +116,8 @@ void Minnow::update(Grid *g) {
 	} else if(pos[axis] == -1){
 		pos[axis] = 4;
 	}
-	printf("Minnow moved to [%d][%d][%d] from [%d][%d][%d]\n",
-		pos[0], pos[1], pos[2], get_point()->get_x_pos(), get_point()->get_y_pos(), get_point()->get_z_pos()
-	);
+	//printf("Minnow moved to [%d][%d][%d] from [%d][%d][%d]\n",
+	//	pos[0], pos[1], pos[2], get_point()->get_x_pos(), get_point()->get_y_pos(), get_point()->get_z_pos()
+	//);
 	g->get_point_at(pos[0], pos[1], pos[2])->move_fish_to_here(MINNOW, this);
 }
