@@ -67,7 +67,7 @@ int Point::determine_events() {
 		num_events++;
 	}
 	// If at least two tuna who have eaten then create one more tuna
-	if(tunas.size() >= 2){ // TODO: check that they have eaten
+	if(tunas.size() >= 2){
 		int count = 0;
 		for(auto it = tunas.begin(); it != tunas.end(); it++){
 			if((*it)->has_eaten){
@@ -80,7 +80,7 @@ int Point::determine_events() {
 		}
 	}
 	// If at least two sharks who have eaten then create one more shark
-	if(sharks.size() >= 2){ // TODO: check that they have eaten
+	if(sharks.size() >= 2){
 		int count = 0;
 		for(auto it = sharks.begin(); it != sharks.end(); it++){
 			if((*it)->has_eaten){
@@ -159,6 +159,7 @@ void Point::handle_event(enum EVENT e){
 	}
 	case SHARK_EAT_MINNOWS:
 		std::cout << "Shark eat all minnows in neighbouring sites\n";
+		(*sharks.begin())->has_eaten = true;
 		int x, y, z;
 		for(int i = -1; i <= 1; i++){
 			for(int j = -1; j <= 1; j++){

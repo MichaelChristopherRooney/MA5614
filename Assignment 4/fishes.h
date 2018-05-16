@@ -20,17 +20,13 @@ private:
 class Tuna : public Fish {
 public:
 	void update(Grid *g);
-	bool has_eaten = false;
-private:
-	int last_eaten = -1; // number of the iteration when it last ate
+	bool has_eaten = false;	
 };
 
 class Shark : public Fish {
 public:
 	void update(Grid *g);
 	bool has_eaten = false;
-private:
-	int last_eaten = -1; // number of the iteration when it last ate
 };
 
 class Minnow : public Fish {

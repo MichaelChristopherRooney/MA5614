@@ -22,17 +22,20 @@ void Grid::randomly_fill() {
 		for(int y = 0; y < GRID_SIZE; y++){
 			for(int z = 0; z < GRID_SIZE; z++){
 				points[x][y][z] = new Point(x, y, z, this);
-				int num = distr(eng);
-				if(num == 1){
+				int num = distr(eng); // number between 1 and 10
+				if(num == 1){ // spawn 1 tuna
 					Tuna *t = new Tuna();
 					points[x][y][z]->create_fish_here(TUNA, t);
 					tunas.push_back(t);
-				} else if(num == 2){
+				} else if(num == 2){ // spawn 1 shark
 					Shark *s = new Shark();
 					points[x][y][z]->create_fish_here(SHARK, s);
 					sharks.push_back(s);
-				} else if(num == 3){
+				} else if(num == 3){ // spawn 2 minnows
 					Minnow *m = new Minnow();
+					points[x][y][z]->create_fish_here(MINNOW, m);
+					minnows.push_back(m);
+					m = new Minnow();
 					points[x][y][z]->create_fish_here(MINNOW, m);
 					minnows.push_back(m);
 				} // else nothing at that particular point
@@ -42,6 +45,10 @@ void Grid::randomly_fill() {
 }
 
 void Grid::print() const {
+	std::cout << "========\nItertation number: " << iteration_number << "\n========\n";
+	std::cout << sharks.size() << " sharks\n";
+	std::cout << tunas.size() << " tunas\n";
+	std::cout << minnows.size() << " minnows\n";
 	for(int x = 0; x < GRID_SIZE; x++){
 		for(int y = 0; y < GRID_SIZE; y++){
 			for(int z = 0; z < GRID_SIZE; z++){
@@ -54,9 +61,6 @@ void Grid::print() const {
 			}
 		}
 	}
-	std::cout << sharks.size() << " sharks\n";
-	std::cout << tunas.size() << " tunas\n";
-	std::cout << minnows.size() << " minnows\n";
 }
 
 Point *Grid::get_point_at(int x, int y, int z){
@@ -68,7 +72,7 @@ int Grid::get_iteration_number() const {
 }
 
 // A helper function that randomly selects a given fish from a vector.
-int Grid::find_fish(std::vector<Fish *> *vec) const {
+int Grid::select_random_fish(std::vector<Fish *> *vec) const {
 	if(vec->empty()){
 		return -1;
 	}
@@ -86,29 +90,23 @@ void Grid::update() {
 		}
 		int species = (rand() % 3);
 		int index;
+		std::vector<Fish *> *vec;
 		switch(species){
 		case TUNA:
-			index = find_fish((std::vector<Fish *> *)&tunas);
-			if(index == -1){ // no fish in this species to move
-				return;
-			}
-			tunas[index]->update(this);
+			vec = (std::vector<Fish *> *) &tunas;
 			break;
 		case SHARK:
-			index = find_fish((std::vector<Fish *> *)&sharks);
-			if(index == -1){ // no fish in this species to move
-				return;
-			}
-			sharks[index]->update(this);
+			vec = (std::vector<Fish *> *) &sharks;
 			break;
 		case MINNOW:
-			index = find_fish((std::vector<Fish *> *)&minnows);
-			if(index == -1){ // no fish in this species to move
-				return;
-			}
-			minnows[index]->update(this);	
+			vec = (std::vector<Fish *> *) &minnows;
 			break;
 		}
+		index = select_random_fish(vec);
+		if(index == -1){ // no fish in this species to move
+			continue;
+		}
+		vec->at(index)->update(this);
 	}
 	iteration_number++;
 }

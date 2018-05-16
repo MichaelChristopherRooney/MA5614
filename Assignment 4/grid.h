@@ -26,7 +26,7 @@ public:
 	static void apply_boundary(int *x, int *y, int *z);
 private:
 	void randomly_fill();
-	int find_fish(std::vector<Fish *> *vec) const;
+	int select_random_fish	(std::vector<Fish *> *vec) const;
 	std::vector<std::vector<std::vector<Point *> > > points; // 3D grid of points
 	std::vector<Minnow *> minnows;
 	std::vector<Tuna *> tunas;

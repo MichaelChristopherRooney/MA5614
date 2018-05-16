@@ -6,6 +6,7 @@ int main(void){
 	g->update();
 	g->print();
 	g->update();
+	g->print();
 	delete(g);
 	return 0;
 }
